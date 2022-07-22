@@ -5,23 +5,23 @@ services:
       context: ./php/
       dockerfile: Dockerfile
     image: laravel-php7.4-image
-    container_name: member-app
+    container_name: laravel-app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./../:/var/www
       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
-      - member-app-network
+      - laravel-app-network
 
   db:
     image: mysql:5.7
-    container_name: member-db
+    container_name: laravel-db
     restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
-      MYSQL_DATABASE: member-app
+      MYSQL_DATABASE: laravel-app
       MYSQL_ROOT_PASSWORD: root
       MYSQL_PASSWORD: password
       MYSQL_ROOT_USER: root
@@ -33,11 +33,11 @@ services:
     depends_on:
       - app
     networks:
-      - member-app-network
+      - laravel-app-network
 
   nginx:
     image: nginx:alpine
-    container_name: member-nginx
+    container_name: laravel-nginx
     restart: unless-stopped
     ports:
       - 8000:80
@@ -47,8 +47,8 @@ services:
     depends_on:
       - app
     networks:
-      - member-app-network
+      - laravel-app-network
 
 networks:
-  member-app-network:
+  laravel-app-network:
     driver: bridge
